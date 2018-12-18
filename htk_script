@@ -1,0 +1,78 @@
+﻿!Steps
+
+Train!!!
+---------------------------
+
+HDMan -m -w D:\htk\dictionary\words-sorted.list -n D:\htk\dictionary\phones.list -l dlog D:\htk\dictionary\phones.dict D:\htk\dictionary\dict
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+HParse D:\htk\dictionary\grammar D:\htk\dictionary\grammar.wordnet
+
+HSGEN -n 20 -s D:\htk\dictionary\grammar.wordnet D:\htk\dictionary\phones.dict
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+HLEd -d D:\htk\dictionary\phones.dict -i D:\htk\train-phones.mlf D:\htk\parameter\HLEd.config D:\htk\train-words.mlf
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+HCopy -T 1 -C D:\htk\parameter\HCopy.config -S D:\htk\data\list.scp
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+HCompV -C D:\htk\parameter\HCompV.config -f 0.01 -m -S D:\htk\data\listMFC.txt -M D:\htk\model\hmm0 D:\htk\model\prototype.txt
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+HERest -T 0 -C D:\htk\parameter\HERest.config -I D:\htk\train-phones.mlf -t 250.0 150.0 10000.0 -S D:\htk\data\listMFC.txt -H D:\htk\model\hmm0\macros -H D:\htk\model\hmm0\hmmdefs -M D:\htk\model\hmm1 D:\htk\dictionary\phones.list
+
+HERest -T 0 -C D:\htk\parameter\HERest.config -I D:\htk\train-phones.mlf -t 250.0 150.0 10000.0 -S D:\htk\data\listMFC.txt -H D:\htk\model\hmm1\macros -H D:\htk\model\hmm1\hmmdefs -M D:\htk\model\hmm2 D:\htk\dictionary\phones.list
+
+HERest -T 0 -C D:\htk\parameter\HERest.config -I D:\htk\train-phones.mlf -t 250.0 150.0 10000.0 -S D:\htk\data\listMFC.txt -H D:\htk\model\hmm2\macros -H D:\htk\model\hmm2\hmmdefs -M D:\htk\model\hmm3 D:\htk\dictionary\phones.list
+
+HERest -T 0 -C D:\htk\parameter\HERest.config -I D:\htk\train-phones.mlf -t 250.0 150.0 10000.0 -S D:\htk\data\listMFC.txt -H D:\htk\model\hmm3\macros -H D:\htk\model\hmm3\hmmdefs -M D:\htk\model\hmm4 D:\htk\dictionary\phones.list
+
+HERest -T 0 -C D:\htk\parameter\HERest.config -I D:\htk\train-phones.mlf -t 250.0 150.0 10000.0 -S D:\htk\data\listMFC.txt -H D:\htk\model\hmm5\macros -H D:\htk\model\hmm5\hmmdefs -M D:\htk\model\hmm6 D:\htk\dictionary\phones.list
+
+HERest -T 0 -C D:\htk\parameter\HERest.config -I D:\htk\train-phones.mlf -t 250.0 150.0 10000.0 -S D:\htk\data\listMFC.txt -H D:\htk\model\hmm6\macros -H D:\htk\model\hmm6\hmmdefs -M D:\htk\model\hmm7 D:\htk\dictionary\phones.list
+
+HERest -T 0 -C D:\htk\parameter\HERest.config -I D:\htk\train-phones.mlf -t 250.0 150.0 10000.0 -S D:\htk\data\listMFC.txt -H D:\htk\model\hmm7\macros -H D:\htk\model\hmm7\hmmdefs -M D:\htk\model\hmm8 D:\htk\dictionary\phones.list
+
+HERest -T 0 -C D:\htk\parameter\HERest.config -I D:\htk\train-phones.mlf -t 250.0 150.0 10000.0 -S D:\htk\data\listMFC.txt -H D:\htk\model\hmm8\macros -H D:\htk\model\hmm8\hmmdefs -M D:\htk\model\hmm9 D:\htk\dictionary\phones.list
+
+HERest -T 0 -C D:\htk\parameter\HERest.config -I D:\htk\train-phones.mlf -t 250.0 150.0 10000.0 -S D:\htk\data\listMFC.txt -H D:\htk\model\hmm9\macros -H D:\htk\model\hmm9\hmmdefs -M D:\htk\model\hmm10 D:\htk\dictionary\phones.list
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+HHEd -H D:\htk\model\hmm4\macros -H D:\htk\model\hmm4\hmmdefs -M D:\htk\model\hmm5 D:\htk\parameter\HHEdIncrementMixtures.conf D:\htk\dictionary\phones.list
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+Test!!!
+------------------------------------
+
+HCopy -T 1 -C D:\htk\parameter\HCopy.config -S D:\htk\test\list.scp
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+HVite -H D:\htk\model\hmm10\macros -H D:\htk\model\hmm10\hmmdefs -S D:\htk\test\listMFC.txt -i D:\htk\test\reco.mlf -w D:\htk\dictionary\grammar.wordnet -p 0.0 -s 5.0 D:\htk\dictionary\phones.dict D:\htk\dictionary\phones.list
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+HRESULTS -T 1 -L D:\htk\test\lab D:\htk\test\testwordOut.txt D:\htk\test\reco.mlf
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+HVITE –T 1 -C D:\htk\parameter\config.conf -g -H D:\htk\model\hmm10\hmmdefs -w D:\htk\dictionary\grammar.wordnet D:\htk\dictionary\phones.dict D:\htk\model\hmmlist.txt
+
+HVite -A -D -T 1 -C D:\htk\parameter\config.conf -g -H D:\htk\dictionary\phones.list  -w D:\htk\dictionary\grammar.wordnet D:\htk\dictionary\phones.dict D:\htk\model\hmmlist.txt}
+
+HVite -g -w D:\htk\dictionary\grammar.wordnet -T 1 -H D:\htk\model\hmm10\hmmdefs -C D:\htk\parameter\config.conf  D:\htk\dictionary\phones.dict D:\htk\model\hmmlist.txt
+
+HVite -C D:\htk\parameter\config.conf -g -H D:\htk\model\hmm10\hmmdefs -w D:\htk\dictionary\grammar.wordnet D:\htk\dictionary\phones.dict D:\htk\model\hmmlist.txt
+
+HVite -A -D -T 1 -g  -H -C D:\htk\parameter\config.conf D:\htk\model\hmm10\macros -H D:\htk\model\hmm10\hmmdefs -w D:\htk\dictionary\grammar.wordnet -p 0.0 -s 5.0 D:\htk\dictionary\phones.dict D:\htk\dictionary\phones.list
+
+
