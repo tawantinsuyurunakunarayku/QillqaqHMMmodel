@@ -1,2 +1,2 @@
-# SiminchikHMM
-ASR for quechua language built with HMM
+# Qillqaq HMM model
+HMM model to build a ASR for quechua language
