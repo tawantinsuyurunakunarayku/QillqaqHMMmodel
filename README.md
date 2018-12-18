@@ -94,3 +94,7 @@ We are always happy to hear from you:
 
 rjzevallos.salazar@gmail.com \
 camacho.l@pucp.pe
+=======
+# Qillqaq HMM model
+HMM model to build a ASR for quechua language
+
